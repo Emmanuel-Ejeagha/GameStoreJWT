@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GameJwt")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+21d5d1ebd1e8574350b7f12593f3d6f1d65b18d5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a042236059d2cfb74dfde4cc75aebc8c8d1063bb")]
 [assembly: System.Reflection.AssemblyProductAttribute("GameJwt")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GameJwt")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
