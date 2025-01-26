@@ -6,6 +6,12 @@ Dictionary<string, List<string>> gamesMap = new()
   {"player2", new List<string>(){"Mission Impossible", "Gangster Crime City", "Zuma"}}
 };
 
+Dictionary<string, List<string>> subscriptionMap = new()
+{
+  {"silver", new List<string>(){"Mortal Combact", "Mario"}},
+  {"gold", new List<string>(){"Mortal Combact", "Mario","Mission Impossible", "Gangster Crime City", "Zuma"}}
+};
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthentication().AddJwtBearer();
@@ -16,24 +22,32 @@ var app = builder.Build();
 app.MapGet("/players", () => gamesMap)
   .RequireAuthorization(policy =>
   {
-      policy.RequireRole("admin");
+    policy.RequireRole("admin");
   });
 
 app.MapGet("/mygames", (ClaimsPrincipal user) =>
 {
-    ArgumentNullException.ThrowIfNull(user.Identity?.Name);
-    var username = user.Identity.Name;
+  var hasClaim = user.HasClaim(claim => claim.Type == "subscription");
 
-    if (!gamesMap.ContainsKey(username))
-    {
-        return Results.Empty;
-    }
+  if (hasClaim)
+  {
+    var subs = user.FindFirstValue("subscription") ?? throw new Exception("Claim has no value");
+    return Results.Ok(subscriptionMap[subs]);
+  }
 
-    return Results.Ok(gamesMap[username]);
+  ArgumentNullException.ThrowIfNull(user.Identity?.Name);
+  var username = user.Identity.Name;
+
+  if (!gamesMap.ContainsKey(username))
+  {
+    return Results.Empty;
+  }
+
+  return Results.Ok(gamesMap[username]);
 })
 .RequireAuthorization(policy =>
   {
-      policy.RequireRole("player");
+    policy.RequireRole("player");
   });
 
 app.Run();
